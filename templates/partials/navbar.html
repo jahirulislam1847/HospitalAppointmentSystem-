@@ -1,0 +1,70 @@
+{% load static %}
+
+<nav class="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="flex items-center justify-between h-16">
+
+            <a href="{% url 'coreApp:home' %}" class="flex items-center gap-2 shrink-0">
+                <img src="{% static 'coreApp/images/logo.png' %}" alt="" class="w-9 h-9 rounded-lg object-cover">
+                <span class="font-display font-bold text-lg text-dark-blue">Hospital Appointment</span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8">
+                <a href="{% url 'coreApp:home' %}" class="text-sm font-medium text-slate-600 hover:text-blue transition-colors">Home</a>
+                <a href="{% url 'doctorApp:doctor_list' %}" class="text-sm font-medium text-slate-600 hover:text-blue transition-colors">Doctors</a>
+                <a href="{% url 'hospitalApp:hospital_list' %}" class="text-sm font-medium text-slate-600 hover:text-blue transition-colors">Hospitals</a>
+            </div>
+
+            <div class="hidden md:flex items-center gap-3">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'userApp:dashboard' %}"
+                        class="text-sm font-medium text-slate-600 hover:text-blue transition-colors px-3 py-2">Dashboard</a>
+                    <form method="post" action="{% url 'userApp:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit"
+                            class="rounded-lg bg-blue hover:bg-dark-blue text-white text-sm font-semibold px-4 py-2 transition-colors cursor-pointer">
+                            Sign out
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'userApp:login' %}"
+                        class="text-sm font-medium text-slate-600 hover:text-blue transition-colors px-3 py-2">Login</a>
+                    <a href="{% url 'userApp:register' %}"
+                        class="rounded-lg bg-blue hover:bg-dark-blue text-white text-sm font-semibold px-4 py-2 transition-colors">
+                        Register
+                    </a>
+                {% endif %}
+            </div>
+
+            <button id="mobile-menu-btn" class="md:hidden grid place-items-center w-9 h-9 text-slate-600" aria-label="Toggle menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-1">
+            <a href="{% url 'coreApp:home' %}" class="block px-2 py-2 text-sm font-medium text-slate-600 hover:text-blue">Home</a>
+            <a href="{% url 'coreApp:home' %}#doctors" class="block px-2 py-2 text-sm font-medium text-slate-600 hover:text-blue">Doctors</a>
+            <a href="{% url 'coreApp:home' %}#hospitals" class="block px-2 py-2 text-sm font-medium text-slate-600 hover:text-blue">Hospitals</a>
+            <div class="pt-2 mt-2 border-t border-slate-200 space-y-1">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'userApp:dashboard' %}" class="block px-2 py-2 text-sm font-medium text-slate-600 hover:text-blue">Dashboard</a>
+                    <form method="post" action="{% url 'userApp:logout' %}" class="px-2 pt-1">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full text-left rounded-lg bg-blue text-white text-sm font-semibold px-3 py-2 cursor-pointer">Sign out</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'userApp:login' %}" class="block px-2 py-2 text-sm font-medium text-slate-600 hover:text-blue">Login</a>
+                    <a href="{% url 'userApp:register' %}" class="block mx-2 mt-1 rounded-lg bg-blue text-white text-sm font-semibold px-3 py-2 text-center">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', function () {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+</script>

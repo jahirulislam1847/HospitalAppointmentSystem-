@@ -1,0 +1,116 @@
+{% load static %}
+
+<footer class="bg-dark-blue text-slate-300 pt-16 pb-8 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Main Footer Content -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+            
+            <!-- Brand & Info Column (Spans 2 cols on large screens) -->
+            <div class="lg:col-span-2 space-y-4">
+                <a href="{% url 'coreApp:home' %}" class="inline-flex items-center gap-2.5">
+                    <img src="{% static 'coreApp/images/logo.png' %}" alt="Logo" class="h-8 w-auto">
+                    <span class="font-display font-extrabold text-xl text-white tracking-tight">
+                        Hospital <span class="text-light-blue">Appointment</span>
+                    </span>
+                </a>
+                <p class="text-sm text-slate-400 max-w-sm leading-relaxed">
+                    Connecting patients with top-tier medical specialists and premier hospitals across Bangladesh for seamless appointments and quality care.
+                </p>
+                <!-- Emergency Helpline Badge -->
+                <div class="pt-2">
+                    <div class="inline-flex items-center gap-3 px-4 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60">
+                        <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                        <div class="text-xs">
+                            <span class="block text-slate-400">Emergency Support Hotline</span>
+                            <span class="font-bold text-white text-sm">16263 / +880 9611 000 000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Navigation Links -->
+            <div>
+                <h3 class="font-display font-semibold text-sm text-white tracking-wider uppercase mb-4">
+                    Quick Links
+                </h3>
+                <ul class="space-y-2.5 text-sm">
+                    <li>
+                        <a href="{% url 'coreApp:home' %}" class="hover:text-light-blue transition-colors">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'hospitalApp:hospital_list' %}" class="hover:text-light-blue transition-colors">Find Hospitals</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'doctorApp:doctor_list' %}" class="hover:text-light-blue transition-colors">Find Doctors</a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-light-blue transition-colors">Specialties</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Services / Features -->
+            <div>
+                <h3 class="font-display font-semibold text-sm text-white tracking-wider uppercase mb-4">
+                    Services
+                </h3>
+                <ul class="space-y-2.5 text-sm">
+                    <li>
+                        <a href="#" class="hover:text-light-blue transition-colors">Book Appointments</a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-light-blue transition-colors">Teleconsultation</a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-light-blue transition-colors">Hospital Directories</a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-light-blue transition-colors">Doctor Profiles</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contact & Hours -->
+            <div>
+                <h3 class="font-display font-semibold text-sm text-white tracking-wider uppercase mb-4">
+                    Contact Us
+                </h3>
+                <ul class="space-y-3 text-sm text-slate-400">
+                    <li class="flex items-start gap-2.5">
+                        <svg class="w-4 h-4 text-light-blue shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span>Dhaka, Bangladesh</span>
+                    </li>
+                    <li class="flex items-center gap-2.5">
+                        <svg class="w-4 h-4 text-light-blue shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <a href="mailto:support@hospital.com" class="hover:text-light-blue transition-colors">support@hospital.com</a>
+                    </li>
+                    <li class="flex items-center gap-2.5">
+                        <svg class="w-4 h-4 text-light-blue shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Support: 24/7 Available</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Bottom Bar (Copyright & Legal) -->
+        <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+            <p>© {% now "Y" %} Hospital Appointment. All rights reserved.</p>
+            
+            <div class="flex items-center gap-6">
+                <a href="#" class="hover:text-light-blue transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-light-blue transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-light-blue transition-colors">Contact Support</a>
+            </div>
+        </div>
+
+    </div>
+</footer>

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Create Account · Hospital Appointment{% endblock %}
+
+{% block content %}
+<div class="flex-1 flex">
+
+    <!-- Branding panel -->
+    <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-dark-blue">
+        <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-blue/30 blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-light-blue/20 blur-3xl"></div>
+
+        <div class="relative z-10 flex flex-col justify-between p-14 text-white w-full">
+            <a href="{% url 'userApp:register' %}" class="flex items-center gap-2.5">
+                <span class="grid place-items-center w-10 h-10 rounded-xl bg-white/10 border border-white/20">
+                    <svg class="w-5 h-5 text-light-blue" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21s-6.7-4.35-9.3-8.4C.8 9.2 1.9 5.4 5.2 4.3c1.9-.65 3.9.1 5.1 1.7l1.7 2.2 1.7-2.2c1.2-1.6 3.2-2.35 5.1-1.7 3.3 1.1 4.4 4.9 2.5 8.3C18.7 16.65 12 21 12 21z"/></svg>
+                </span>
+                <span class="font-display font-bold text-xl tracking-tight">Hospital Appointment</span>
+            </a>
+
+            <div class="max-w-md">
+                <h1 class="font-display text-4xl font-extrabold leading-tight mb-4">
+                    Your care team,<br>always within reach.
+                </h1>
+                <p class="text-white/70 text-base leading-relaxed">
+                    Book appointments, track visits, and stay connected with doctors across every hospital in our network — from one account.
+                </p>
+
+                <!-- ECG pulse signature -->
+                <div class="mt-10 h-16 w-full max-w-sm">
+                    <svg viewBox="0 0 400 60" class="w-full h-full overflow-visible">
+                        <polyline points="0,30 60,30 80,30 95,10 110,50 125,5 140,30 160,30 220,30 240,30 255,15 270,45 285,30 400,30"
+                            fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            style="stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 3.2s ease-in-out infinite;" />
+                    </svg>
+                </div>
+                <style>@keyframes draw { 0% { stroke-dashoffset: 900; } 55% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; } }</style>
+            </div>
+
+            <p class="text-white/40 text-xs">&copy; {% now "Y" %} Hospital Appointment. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- Form panel -->
+    <div class="flex-1 flex items-center justify-center px-6 py-12 sm:px-10">
+        <div class="w-full max-w-sm">
+
+            <div class="lg:hidden flex items-center gap-2.5 mb-10">
+                <span class="grid place-items-center w-9 h-9 rounded-lg bg-blue/10">
+                    <svg class="w-5 h-5 text-blue" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21s-6.7-4.35-9.3-8.4C.8 9.2 1.9 5.4 5.2 4.3c1.9-.65 3.9.1 5.1 1.7l1.7 2.2 1.7-2.2c1.2-1.6 3.2-2.35 5.1-1.7 3.3 1.1 4.4 4.9 2.5 8.3C18.7 16.65 12 21 12 21z"/></svg>
+                </span>
+                <span class="font-display font-bold text-lg text-dark-blue">Hospital Appointment</span>
+            </div>
+
+            <h2 class="font-display text-2xl font-bold text-dark-blue mb-1.5">Create your account</h2>
+            <p class="text-slate-500 text-sm mb-8">Set up patient access in under a minute.</p>
+
+            <form method="post" class="space-y-5" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                    {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                </div>
+                {% endif %}
+
+                <div>
+                    <label for="{{ form.full_name.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-1.5">Full name</label>
+                    {{ form.full_name }}
+                    {% for error in form.full_name.errors %}<p class="mt-1.5 text-xs text-red-600">{{ error }}</p>{% endfor %}
+                </div>
+
+                <div>
+                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-1.5">Email address</label>
+                    {{ form.email }}
+                    {% for error in form.email.errors %}<p class="mt-1.5 text-xs text-red-600">{{ error }}</p>{% endfor %}
+                </div>
+
+                <div>
+                    <label for="{{ form.phone.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-1.5">Phone number</label>
+                    {{ form.phone }}
+                    {% for error in form.phone.errors %}<p class="mt-1.5 text-xs text-red-600">{{ error }}</p>{% endfor %}
+                </div>
+
+                <div>
+                    <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+                    {{ form.password }}
+                    {% for error in form.password.errors %}<p class="mt-1.5 text-xs text-red-600">{{ error }}</p>{% endfor %}
+                </div>
+
+                <div>
+                    <label for="{{ form.confirm_password.id_for_label }}" class="block text-sm font-medium text-slate-700 mb-1.5">Confirm password</label>
+                    {{ form.confirm_password }}
+                    {% for error in form.confirm_password.errors %}<p class="mt-1.5 text-xs text-red-600">{{ error }}</p>{% endfor %}
+                </div>
+
+                <button type="submit"
+                    class="w-full rounded-lg bg-blue hover:bg-dark-blue text-white font-semibold text-sm py-2.5 transition-colors duration-200 shadow-sm shadow-blue/30 cursor-pointer">
+                    Create account
+                </button>
+            </form>
+
+            <p class="mt-8 text-center text-sm text-slate-500">
+                Already have an account?
+                <a href="{% url 'userApp:login' %}" class="font-semibold text-blue hover:text-dark-blue">Sign in</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

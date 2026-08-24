@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block title %}
+  Home · Hospital Appointment System
+{% endblock %}
+
+{% block content %}
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+    <!-- Hero / Welcome Banner -->
+    <div class="relative overflow-hidden bg-dark-blue rounded-3xl p-8 sm:p-12 text-white shadow-xl">
+      <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-light-blue/20 blur-3xl"></div>
+      <div class="relative z-10 max-w-2xl">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue/30 text-light-blue border border-light-blue/30 mb-4">Healthcare Network Platform</span>
+        <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">Connect with Top Doctors & Premier Hospitals</h1>
+        <p class="mt-4 text-slate-300 text-sm sm:text-base leading-relaxed">Book appointments, find medical specialists, and explore healthcare facilities — streamlined for your care.</p>
+      </div>
+    </div>
+
+    <!-- Top Hospitals Section -->
+    <section>
+      <!-- Section Header with See More -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="font-display text-2xl font-bold text-dark-blue tracking-tight">Most Popular Hospitals</h2>
+          <p class="text-slate-500 text-xs sm:text-sm mt-0.5">Top-rated healthcare providers in our network.</p>
+        </div>
+        <a href="{% url 'hospitalApp:hospital_list' %}" class="hidden md:inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-blue hover:text-dark-blue transition-colors">
+          <span>See More Hospitals</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Grid of 8 Hospitals -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {% for hospital in hospitals %}
+          <div class="flex flex-col bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+            <div class="relative h-40 w-full bg-slate-100">
+              {% if hospital.image %}
+                <img src="{{ hospital.image }}" alt="{{ hospital.name }}" class="w-full h-full object-cover" />
+              {% else %}
+                <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">
+                  <svg class="w-10 h-10 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0V8m0 3h4m-4 0H9" />
+                  </svg>
+                </div>
+              {% endif %}
+              <span class="absolute top-2.5 right-2.5 bg-dark-blue/80 backdrop-blur-md text-white text-[10px] font-medium px-2 py-0.5 rounded-full">{{ hospital.search_count }} views</span>
+            </div>
+
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="font-display font-bold text-base text-dark-blue line-clamp-1 mb-1">{{ hospital.name }}</h3>
+                <p class="text-xs text-slate-500 line-clamp-2 mb-3 flex items-start gap-1">
+                  <svg class="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span>{{ hospital.address }}</span>
+                </p>
+              </div>
+
+              <a href="{% url 'hospitalApp:hospital_detail' slug=hospital.slug %}" class="mt-3 w-full text-center rounded-xl bg-slate-100 hover:bg-blue hover:text-white text-dark-blue font-semibold text-xs py-2 transition-colors">View Facility</a>
+            </div>
+          </div>
+        {% empty %}
+          <div class="col-span-full py-10 text-center bg-white rounded-2xl border border-slate-200/80 text-xs text-slate-400">No hospitals featured yet.</div>
+        {% endfor %}
+      </div>
+
+      <a href="{% url 'hospitalApp:hospital_list' %}" class="flex md:hidden items-center justify-center gap-1 bg-dark-blue hover:bg-blue text-white font-semibold text-xs sm:text-sm py-2 px-4 rounded-xl transition-colors">
+        <span>See More Hospitals</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </section>
+
+    <!-- Top Doctors Section -->
+    <section>
+      <!-- Section Header with See More -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="font-display text-2xl font-bold text-dark-blue tracking-tight">Most Consulted Specialists</h2>
+          <p class="text-slate-500 text-xs sm:text-sm mt-0.5">Top-rated medical professionals in demand.</p>
+        </div>
+        <a href="{% url 'doctorApp:doctor_list' %}" class="hidden md:inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-blue hover:text-dark-blue transition-colors">
+          <span>See More Doctors</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Grid of 8 Doctors -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {% for doctor in doctors %}
+          <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+            <div>
+              <div class="flex items-start gap-3 mb-3">
+                {% if doctor.image %}
+                  <img src="{{ doctor.image }}" alt="{{ doctor.get_full_name }}" class="w-12 h-12 rounded-xl object-cover border border-slate-100 shrink-0" />
+                {% else %}
+                  <div class="w-12 h-12 rounded-xl bg-blue/10 text-blue font-bold text-sm flex items-center justify-center shrink-0 border border-blue/20">Dr</div>
+                {% endif %}
+                <div class="min-w-0 flex-1">
+                  <h3 class="font-display font-bold text-sm text-dark-blue truncate">Dr. {{ doctor.get_full_name }}</h3>
+                  <p class="text-[11px] text-slate-500 truncate">{{ doctor.get_hospital_name }}</p>
+                </div>
+              </div>
+
+              <!-- Tags using custom theme variants -->
+              <div class="flex flex-wrap gap-1 mb-3">
+                {% for spec in doctor.specialized.all %}
+                  <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue/10 text-blue border border-blue/20">{{ spec.name }}</span>
+                {% empty %}
+                  <span class="text-[10px] text-slate-400">General Physician</span>
+                {% endfor %}
+              </div>
+
+              <div class="flex items-center justify-between text-xs py-2 border-t border-slate-100 my-2">
+                <span class="text-slate-400">Consultation Fee</span>
+                <span class="font-bold text-blue">৳{{ doctor.fee }}</span>
+              </div>
+            </div>
+
+            <a href="{% url 'doctorApp:doctor_detail' pk=doctor.pk %}" class="mt-2 w-full text-center rounded-xl bg-dark-blue hover:bg-blue text-white font-medium text-xs py-2 transition-colors">View Profile</a>
+          </div>
+        {% empty %}
+          <div class="col-span-full py-10 text-center bg-white rounded-2xl border border-slate-200/80 text-xs text-slate-400">No doctors featured yet.</div>
+        {% endfor %}
+      </div>
+
+      <a href="{% url 'doctorApp:doctor_list' %}" class="flex md:hidden items-center justify-center gap-1 bg-dark-blue hover:bg-blue text-white font-semibold text-xs sm:text-sm py-2 px-4 rounded-xl transition-colors">
+        <span>See More Doctors</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </section>
+  </div>
+{% endblock %}
