@@ -11,9 +11,9 @@ def home_view(request):
 
     # Fetch top 8 doctors ordered by most views
     doctors = DoctorProfile.objects.select_related(
-        'user',
-        'hospital'
+        'user'
     ).prefetch_related(
+        'hospital',
         'specialized',
         'qualification',
         'schedules'

@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
 
@@ -39,11 +40,11 @@ class DoctorProfile(models.Model):
         limit_choices_to={'role': 'doctor'} # Ensures only 'doctor' users get a profile
     )
 
-    # Relationship (FK -> Hospitals)
-    hospital = models.ForeignKey(
+    # Relationship (M-2-M -> Hospitals)
+    hospital = models.ManyToManyField(
         Hospital,
-        on_delete=models.CASCADE,
-        related_name='doctors'
+        related_name='doctors',
+        help_text="One doctor can belongs to multiple hospitals."
     )
     
     specialized = models.ManyToManyField(
@@ -61,7 +62,7 @@ class DoctorProfile(models.Model):
         return self.user.full_name
     
     def get_hospital_name(self):
-        return self.hospital.name
+        return f"{', '.join([h.name for h in self.hospital.all()])}"
 
     def __str__(self):
         return f"Dr. {self.user.full_name}"
@@ -111,7 +112,7 @@ class DoctorQualification(models.Model):
         on_delete=models.CASCADE,
         related_name='qualification'
     )
-    name = models.CharField(max_length=150, unique=True, help_text="Qualification Title.")
+    name = models.CharField(max_length=150, help_text="Qualification Title.")
     institution = models.CharField(max_length=150, help_text="Institution Name.")
     passing_year = models.PositiveIntegerField(help_text="Year of Passing.")
 
@@ -123,3 +124,26 @@ class DoctorQualification(models.Model):
     def __str__(self):
         return f"{self.doctor.user.full_name}"
 
+class DoctorReview(models.Model):
+    doctor = models.ForeignKey(
+        DoctorProfile, on_delete=models.CASCADE, related_name='reviews'
+    )
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name='doctor_reviews'
+    )
+    rating = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        help_text="Rating from 1 to 5 stars.",
+    )
+    comment = models.TextField(blank=True, null=True)
+    show = models.BooleanField(
+        default=True, help_text="Control review visibility on the platform."
+    )
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('doctor', 'user')  # Prevents duplicate reviews from the same user
+
+    def __str__(self):
+        return f"Review by {self.user.full_name} for Dr. {self.doctor.user.full_name} ({self.rating}★)"

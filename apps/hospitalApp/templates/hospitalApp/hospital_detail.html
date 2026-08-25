@@ -100,7 +100,9 @@
                         </div>
 
                         <div class="flex-1 min-w-0">
-                            <h3 class="font-display font-bold text-base text-slate-900 truncate">Dr. {{ doctor.get_full_name }}</h3>
+                            <a href="{% url 'doctorApp:doctor_detail' pk=doctor.pk %}" class="font-display font-bold text-base text-slate-900 truncate hover:underline">
+                                Dr. {{ doctor.get_full_name }}
+                            </a>
                             <div class="flex flex-wrap gap-1 mt-1">
                                 {% for spec in doctor.specialized.all %}
                                     <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-blue/10 text-blue border border-blue/20">
