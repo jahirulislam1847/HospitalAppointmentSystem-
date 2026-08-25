@@ -40,10 +40,22 @@
 
                 <p class="text-sm font-medium text-slate-600 mt-1 flex items-center gap-1.5">
                     <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0V8m0 3h4m-4 0H9"/></svg>
-                    <a href="{% url 'hospitalApp:hospital_detail' slug=doctor.hospital.slug %}" class="hover:underline text-blue font-semibold">
-                        {{ doctor.get_hospital_name }}
-                    </a>
+                    
+                    {% for hospital in doctor.hospital.all %}
+                        <a href="{% url 'hospitalApp:hospital_detail' slug=hospital.slug %}" class="hover:underline text-blue font-semibold">
+                            {{ hospital.name }}{% if not forloop.last %},{% endif %}{% if forloop.last %}.{% endif %}
+                        </a>
+                    {% endfor %}
                 </p>
+
+                <!-- Rating Summary Badge in Hero -->
+                <div class="flex items-center gap-2 mt-2">
+                    <div class="flex items-center text-amber-400">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <span class="text-xs font-bold text-slate-800 ml-1">{{ avg_rating|floatformat:1 }}</span>
+                    </div>
+                    <span class="text-xs text-slate-400">({{ reviews_count }} review{{ reviews_count|pluralize }})</span>
+                </div>
 
                 <!-- Specialties -->
                 <div class="flex flex-wrap gap-1.5 mt-3">
@@ -61,7 +73,6 @@
             <div class="w-full md:w-auto bg-slate-50 border border-slate-200/80 p-5 rounded-2xl flex flex-col items-center justify-center shrink-0 min-w-[200px]">
                 <span class="text-xs text-slate-500 font-medium">Consultation Fee</span>
                 <span class="text-2xl font-extrabold text-slate-900 my-1">৳{{ doctor.fee }}</span>
-                {% comment %} <a href="{% url 'appointmentApp:create_appointment' %}?doctor={{ doctor.pk }}"  {% endcomment %}
                 <a href="" 
                    class="w-full text-center mt-2 px-5 py-2.5 rounded-xl bg-blue hover:bg-dark-blue text-white font-semibold text-xs transition-colors duration-200 shadow-sm shadow-blue/20">
                     Book Appointment
@@ -73,7 +84,7 @@
     <!-- Additional Information Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <!-- Left 2 columns: Qualifications & Chamber Details -->
+        <!-- Left 2 columns: Qualifications, Chamber Details, & Reviews -->
         <div class="lg:col-span-2 space-y-6">
             
             <!-- Chamber Information -->
@@ -84,10 +95,12 @@
                         <span class="text-xs text-slate-400 block mb-1">Chamber Room</span>
                         <span class="font-semibold text-slate-800">{{ doctor.chamber_room|default:"Main Consultation Room" }}</span>
                     </div>
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                        <span class="text-xs text-slate-400 block mb-1">Hospital Contact</span>
-                        <span class="font-semibold text-slate-800">{{ doctor.hospital.contact }}</span>
-                    </div>
+                    {% for hospital in doctor.hospital.all %}
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-xs text-slate-400 block mb-1">Hospital</span>
+                            <span class="font-semibold text-slate-800">{{ hospital.name }}</span>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -111,11 +124,112 @@
                     {% endfor %}
                 </div>
             </div>
+
+            <!-- Patient Reviews & Feedback Section -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-6">
+                
+                <!-- Review Header & Rating Summary -->
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div>
+                        <h3 class="font-display font-bold text-lg text-slate-900">Patient Reviews</h3>
+                        <p class="text-xs text-slate-500">Feedback from verified patients</p>
+                    </div>
+                    
+                    <div class="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                        <div class="flex items-center text-amber-400">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <span class="text-base font-extrabold text-slate-900 ml-1.5">{{ avg_rating|floatformat:1 }}</span>
+                        </div>
+                        <span class="text-xs text-slate-400">|</span>
+                        <span class="text-xs font-medium text-slate-600">{{ reviews_count }} Review{{ reviews_count|pluralize }}</span>
+                    </div>
+                </div>
+
+                <!-- Review Form Card -->
+                <div class="bg-slate-50/80 rounded-xl p-4 border border-slate-200/60">
+                    {% if user.is_authenticated %}
+                        <h4 class="font-semibold text-sm text-slate-900 mb-3">
+                            {% if user_review %}Edit Your Review{% else %}Write a Review{% endif %}
+                        </h4>
+                        
+                        <form method="post" action="{% url 'doctorApp:doctor_detail' doctor.pk %}" class="space-y-4">
+                            {% csrf_token %}
+                            
+                            <div>
+                                <label for="id_rating" class="block text-xs font-semibold text-slate-700 mb-1">Rating (1 to 5 Stars)</label>
+                                <input type="number" name="rating" id="id_rating" min="1" max="5" required 
+                                       value="{{ review_form.rating.value|default:'' }}"
+                                       class="w-full rounded border-slate-300 text-sm shadow-sm focus-within:outline-0 p-1" 
+                                       placeholder="e.g. 5">
+                                {% if review_form.rating.errors %}
+                                    <p class="text-xs text-rose-500 mt-1">{{ review_form.rating.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <label for="id_comment" class="block text-xs font-semibold text-slate-700 mb-1">Your Experience / Feedback</label>
+                                <textarea name="comment" id="id_comment" rows="3" 
+                                          class="w-full rounded border-slate-300 text-sm shadow-sm focus-within:outline-0 p-1" 
+                                          placeholder="Share details about your appointment or care standard...">{{ review_form.comment.value|default:'' }}</textarea>
+                                {% if review_form.comment.errors %}
+                                    <p class="text-xs text-rose-500 mt-1">{{ review_form.comment.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+
+                            <button type="submit" class="px-4 py-2 rounded-lg bg-blue hover:bg-dark-blue text-white text-xs font-semibold transition-colors shadow-sm">
+                                {% if user_review %}Update Review{% else %}Submit Review{% endif %}
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="text-center py-2">
+                            <p class="text-xs text-slate-600 mb-2">Have you consulted Dr. {{ doctor.get_full_name }}?</p>
+                            <a href="{% url 'userApp:login' %}?next={{ request.path }}" class="inline-block px-4 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors">
+                                Log in to leave a review
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Patient Reviews Feed -->
+                <div class="space-y-4">
+                    {% for review in reviews %}
+                        <div class="p-4 rounded-xl bg-white border border-slate-100 shadow-sm space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-7 h-7 rounded-full bg-slate-100 font-bold text-slate-600 text-xs flex items-center justify-center border border-slate-200">
+                                        {{ review.user.full_name|slice:":1"|upper }}
+                                    </div>
+                                    <div>
+                                        <h5 class="text-xs font-bold text-slate-900">{{ review.user.full_name }}</h5>
+                                        <span class="text-[10px] text-slate-400">{{ review.created_at|date:"M d, Y" }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center text-amber-400 bg-amber-50 px-2 py-0.5 rounded border border-amber-200/60">
+                                    <span class="text-xs font-bold text-amber-700 mr-1">{{ review.rating }}</span>
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                </div>
+                            </div>
+
+                            {% if review.comment %}
+                                <p class="text-xs text-slate-600 leading-relaxed pt-1">
+                                    {{ review.comment }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% empty %}
+                        <div class="text-center py-6 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
+                            <p class="text-xs text-slate-400">No patient reviews submitted yet.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
         </div>
 
         <!-- Right Column: Weekly Schedule -->
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm">
+            <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm sticky top-6">
                 <h3 class="font-display font-bold text-lg text-slate-900 mb-4">Weekly Schedule</h3>
 
                 {% if doctor.schedules.all %}

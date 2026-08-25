@@ -38,8 +38,8 @@ class CustomUserAdmin(BaseUserAdmin):
     model = CustomUser
     
     # Fields to display in the list view
-    list_display = ('email', 'full_name', 'role', 'hospital', 'is_active')
-    list_filter = ('role', 'is_active', 'hospital')
+    list_display = ('email', 'full_name', 'role', 'is_active')
+    list_filter = ('role', 'is_active')
     search_fields = ('email', 'full_name', 'phone')
     ordering = ('email',)
 

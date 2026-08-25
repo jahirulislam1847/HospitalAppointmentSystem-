@@ -60,13 +60,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         help_text="Defines the user's role in the system."
     )
 
-    # Relationship (FK -> Hospitals)
+    # Relationship (M-to-M -> Hospitals)
     # NULL for super admin and patients who aren't specifically tied to one hospital
-    hospital = models.ForeignKey(
+    hospital = models.ManyToManyField(
         'hospitalApp.Hospital',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
         related_name='users',
         help_text="Hospital this user is associated with (Null for Super Admin/Patient)."
     )
