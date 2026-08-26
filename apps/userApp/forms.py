@@ -17,39 +17,50 @@ class RegisterForm(forms.ModelForm):
     Public self-registration form. Always creates a 'patient' role account —
     hospital_admin / staff / doctor accounts are provisioned separately by an admin.
     """
+
     password = forms.CharField(
         label="Password",
-        widget=forms.PasswordInput(attrs={
-            "class": INPUT_CLASSES,
-            "placeholder": "Minimum 8 characters",
-        }),
+        widget=forms.PasswordInput(
+            attrs={
+                "class": INPUT_CLASSES,
+                "placeholder": "Minimum 8 characters",
+            }
+        ),
         min_length=8,
     )
     confirm_password = forms.CharField(
         label="Confirm password",
-        widget=forms.PasswordInput(attrs={
-            "class": INPUT_CLASSES,
-            "placeholder": "Re-enter your password",
-        }),
+        widget=forms.PasswordInput(
+            attrs={
+                "class": INPUT_CLASSES,
+                "placeholder": "Re-enter your password",
+            }
+        ),
     )
 
     class Meta:
         model = CustomUser
         fields = ["full_name", "email", "phone"]
         widgets = {
-            "full_name": forms.TextInput(attrs={
-                "class": INPUT_CLASSES,
-                "placeholder": "Jane Doe",
-                "autofocus": True,
-            }),
-            "email": forms.EmailInput(attrs={
-                "class": INPUT_CLASSES,
-                "placeholder": "you@example.com",
-            }),
-            "phone": forms.TextInput(attrs={
-                "class": INPUT_CLASSES,
-                "placeholder": "+1 555 000 0000",
-            }),
+            "full_name": forms.TextInput(
+                attrs={
+                    "class": INPUT_CLASSES,
+                    "placeholder": "Jane Doe",
+                    "autofocus": True,
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "class": INPUT_CLASSES,
+                    "placeholder": "you@example.com",
+                }
+            ),
+            "phone": forms.TextInput(
+                attrs={
+                    "class": INPUT_CLASSES,
+                    "placeholder": "+1 555 000 0000",
+                }
+            ),
         }
 
     def clean_email(self):
@@ -61,7 +72,9 @@ class RegisterForm(forms.ModelForm):
     def clean_phone(self):
         phone = self.cleaned_data.get("phone")
         if phone and CustomUser.objects.filter(phone=phone).exists():
-            raise forms.ValidationError("An account with this phone number already exists.")
+            raise forms.ValidationError(
+                "An account with this phone number already exists."
+            )
         return phone
 
     def clean(self):
@@ -80,20 +93,25 @@ class EmailAuthenticationForm(AuthenticationForm):
     CustomUser.USERNAME_FIELD = 'email', that field is used to look up by email.
     We just relabel it and restyle the widgets for the template.
     """
+
     username = forms.CharField(
         label="Email address",
-        widget=forms.EmailInput(attrs={
-            "class": INPUT_CLASSES,
-            "placeholder": "you@example.com",
-            "autofocus": True,
-        }),
+        widget=forms.EmailInput(
+            attrs={
+                "class": INPUT_CLASSES,
+                "placeholder": "you@example.com",
+                "autofocus": True,
+            }
+        ),
     )
     password = forms.CharField(
         label="Password",
-        widget=forms.PasswordInput(attrs={
-            "class": INPUT_CLASSES,
-            "placeholder": "••••••••",
-        }),
+        widget=forms.PasswordInput(
+            attrs={
+                "class": INPUT_CLASSES,
+                "placeholder": "••••••••",
+            }
+        ),
     )
 
     error_messages = {

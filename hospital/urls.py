@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 """
 hospital/urls.py — project-level URL configuration.
 DRF routers, JWT endpoints, and api-auth removed; everything now goes
@@ -27,13 +28,13 @@ from django.views.static import serve
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    
-    path("", include("apps.coreApp.urls", namespace='coreApp')),
-    path("user/", include("apps.userApp.urls", namespace='userApp')),
-    path('hospitals/', include('apps.hospitalApp.urls', namespace='hospitalApp')),
-    path("doctors/", include("apps.doctorApp.urls", namespace='doctorApp')),
-    # path("appointment/", include("apps.appointmentApp.urls", namespace='appointmentApp')),
-
+    path("", include("apps.coreApp.urls", namespace="coreApp")),
+    path("user/", include("apps.userApp.urls", namespace="userApp")),
+    path("hospitals/", include("apps.hospitalApp.urls", namespace="hospitalApp")),
+    path("doctors/", include("apps.doctorApp.urls", namespace="doctorApp")),
+    path(
+        "appointment/", include("apps.appointmentApp.urls", namespace="appointmentApp")
+    ),
     re_path(r"^static/(?P<path>.*)$", serve, {"document_root": settings.STATIC_ROOT}),
 ]
 

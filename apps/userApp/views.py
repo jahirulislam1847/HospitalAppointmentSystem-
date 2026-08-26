@@ -6,7 +6,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 
+from apps.appointmentApp.models import Appointment
 from .forms import RegisterForm, EmailAuthenticationForm
+
 
 
 def register_view(request):
@@ -23,7 +25,9 @@ def register_view(request):
             user.save()
 
             login(request, user)
-            messages.success(request, f"Welcome, {user.full_name}! Your account has been created.")
+            messages.success(
+                request, f"Welcome, {user.full_name}! Your account has been created."
+            )
             return redirect("userApp:dashboard")
     else:
         form = RegisterForm()
@@ -54,6 +58,60 @@ def logout_view(request):
 
 @login_required(login_url="userApp:login")
 def dashboard_view(request):
-    # Placeholder landing page post-login. Will branch per role once
-    # hospital/doctor/patient/appointment endpoints are provided.
-    return render(request, "userApp/profile/dashboard.html")
+    current_url = request.resolver_match.url_name
+    user = request.user
+
+    # Base context available across dashboard sub-views
+    context = {
+        'current_tab': current_url,
+    }
+
+    # Fetch role-based appointments
+    if user.role == 'patient':
+        appointments_qs = Appointment.objects.filter(patient=user)
+    elif user.role == 'doctor':
+        appointments_qs = Appointment.objects.filter(doctor__user=user)
+    elif user.role in ['hospital_admin', 'staff']:
+        appointments_qs = Appointment.objects.filter(hospital__in=user.hospital.all())
+    else:  # super_admin
+        appointments_qs = Appointment.objects.all()
+
+    appointments_qs = appointments_qs.select_related(
+        'doctor__user', 'patient', 'hospital'
+    ).order_by('-id')
+
+    # 1. Profile Tab
+    if current_url == 'dashboard_profile':
+        if request.method == 'POST':
+            full_name = request.POST.get('full_name', '').strip()
+            phone = request.POST.get('phone', '').strip()
+
+            if full_name:
+                user.full_name = full_name
+                user.phone = phone
+                user.save()
+                messages.success(request, "Profile updated successfully.")
+                return redirect('userApp:dashboard_profile')
+            else:
+                messages.error(request, "Full name cannot be empty.")
+
+        context.update({'section': 'profile'})
+
+    # 2. Appointment List Tab
+    elif current_url == 'dashboard_appointment_list':
+        context.update({
+            'section': 'appointment_list',
+            'appointments': appointments_qs,
+        })
+
+    # 3. Dashboard Overview Tab (Default)
+    else:
+        context.update({
+            'section': 'overview',
+            'appointments_count': appointments_qs.count(),
+            'pending_count': appointments_qs.filter(status='pending').count(),
+            'approved_count': appointments_qs.filter(status='approved').count(),
+            'recent_appointments': appointments_qs[:5],
+        })
+
+    return render(request, "userApp/profile/dashboard.html", context)
