@@ -14,13 +14,15 @@ class Hospital(models.Model):
 
     # Relationship (FK -> Users: Super Admin)
     created_by = models.ForeignKey(
-        'userApp.CustomUser',
-        on_delete=models.PROTECT, # Protects the hospital record from deletion if the creator is still needed
-        related_name='hospitals_created',
-        limit_choices_to={'role': 'super_admin'} # Only super admins can create hospitals
+        "userApp.CustomUser",
+        on_delete=models.PROTECT,  # Protects the hospital record from deletion if the creator is still needed
+        related_name="hospitals_created",
+        limit_choices_to={
+            "role": "super_admin"
+        },  # Only super admins can create hospitals
     )
     created_at = models.DateTimeField(default=timezone.now)
-    
+
     def save(self, *args, **kwargs):
         # Only set slug if not provided manually
         if not self.slug:
@@ -30,8 +32,7 @@ class Hospital(models.Model):
 
     def __str__(self):
         return self.name
-    
-    class Meta:
-        verbose_name = 'Hospital'
-        verbose_name_plural = 'Hospitals'
 
+    class Meta:
+        verbose_name = "Hospital"
+        verbose_name_plural = "Hospitals"

@@ -14,8 +14,8 @@ class DoctorListView(ListView):
 
     def get_queryset(self):
         queryset = (
-            DoctorProfile.objects.select_related("user", "hospital")
-            .prefetch_related("specialized", "qualification", "schedules")
+            DoctorProfile.objects.select_related("user")
+            .prefetch_related("hospital", "specialized", "qualification", "schedules")
             .all()
         )
 
@@ -125,25 +125,3 @@ class DoctorDetailView(DetailView):
         context["review_form"] = form
         return self.render_to_response(context)
 
-
-# class DoctorDetailView(DetailView):
-#     model = DoctorProfile
-#     template_name = 'doctorApp/doctor_detail.html'
-#     context_object_name = 'doctor'
-#     pk_url_kwarg = 'pk'  # Primary key corresponds to user_id
-
-#     def get_queryset(self):
-#         return DoctorProfile.objects.select_related(
-#             'user'
-#         ).prefetch_related(
-#             'hospital',
-#             'specialized',
-#             'qualification',
-#             'schedules'
-#         )
-
-#     def get_object(self, queryset=None):
-#         obj = super().get_object(queryset)
-#         # Atomically increment search view count
-#         DoctorProfile.objects.filter(pk=obj.pk).update(search_count=F('search_count') + 1)
-#         return obj
